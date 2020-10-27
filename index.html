@@ -8,16 +8,121 @@
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="dist/theme/white.css" id="theme">
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+        <style>
+          h1,h2,h3,h4,h5,h6 { text-transform: none !important;}
+          section.left { text-align: left; }
+        </style>
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section data-markdown>
+                ## Show-and-tell:
+
+                # purescript-protobuf
+
+                James Brock
+
+                Cross Compass
+
+                2020 October 29
+                </section>
+                <section data-markdown class=left>
+                What is Google Protocol Buffers (“protobuf”)?
+
+                ### A way to specify a serialization for some structured data
+
+                In this way, protobuf is like YAML, except
+                  * non-readable,
+                  * must have a schema for the structure.
+                </section>
+                <section data-markdown class=left>
+                What is Google Protocol Buffers (“protobuf”)?
+
+                ### A way to generate code that can de/serialize protobuf “messages”
+
+                Each programming language needs its own protobuf
+                implementation.
+                </section>
+                <section data-markdown class=left>
+                What is Google Protocol Buffers (“protobuf”)?
+
+                ### A way to pass structured data between different programming languages.
+                </section>
+                <section data-markdown>
+                ### [github.com/xc-jp/purescript-protobuf](https://github.com/xc-jp/purescript-protobuf)
+                </section>
+                <section class=left>
+                <p>Cross Compass has the <b>only browser implementation</b>
+                which passes the official <b>Google
+                Protocol Buffers conformance</b> test.
+                </p>
+                <p>
+                <a href="https://github.com/protocolbuffers/protobuf/blob/master/docs/third_party.md">
+                List of Protocol Buffer implementations
+                </a>
+                </p>
+                <p>
+                The official Google JS implementation doesn’t even try to conform
+                (can’t handle unknown fields).
+                <a href="https://developers.google.com/protocol-buffers/docs/reference/javascript-generated#message">
+                <sup>1</sup>
+                </a>
+                </p>
+                <p>
+                  <a href="https://github.com/protobufjs/protobuf.js">
+                  github.com/protobufjs/protobuf.js
+                  </a>
+                  tries to conform but they
+                  currently can’t pass the test.<a href="https://github.com/protobufjs/protobuf.js/pull/1380">
+                  <sup>2</sup>
+                  </a>
+                </p>
+                </section>
+                <section>
+                  <p>Encoding is easy.</p>
+                  <p>Decoding is hard, because of <b>choice</b> and <b>failure</b>.</p>
+                  <table>
+                    <tbody>
+                      <thead><th>When we say</th><th>We mean</th></thead>
+                      <tr><td>decoding</td><td>parsing</td></tr>
+                      <tr><td>validating</td><td>parsing</td></tr>
+                      <tr><td>deserializing</td><td>parsing</td></tr>
+                      <tr><td>lexing/tokenizing</td><td>parsing</td></tr>
+                      <tr><td>reading a message</td><td>parsing</td></tr>
+                    </tbody>
+                  </table>
+                </section>
+                <section data-markdown>
+                The __purescript-protobuf__ API centers the concept
+                of “monadic parsing”.
+
+                A parsing monad has
+
+                * __state__ (position in the input stream)
+                * __choice__ (we can accept either of two patterns here)
+                * __failure__ (the input cannot be parsed)
+                </section>
+                <section>
+                  <p>1998</p>
+                <img class=r-stretch data-src="assets/MonadicParsing.png"/>
+                <img data-src="assets/Atypeforparsers.png"/>
+                </section>
+                <section>
+                <img class=r-stretch data-src="assets/SeussFinal2.jpeg"/>
+                <p>
+                — <a href="http://www.willamette.edu/~fruehr/haskell/seuss.html">Fritz Ruehr, Willamette University</a>
+                </p>
+                </section>
+
+                <section>
+                <h3>Make your profile Public, like Dennis</h3>
+                <img class="r-stretch" data-src="assets/GithubPeople.png"/>
+                </section>
 			</div>
 		</div>
 
@@ -31,7 +136,13 @@
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
-
+				controls: false,
+				controlsTutorial: false,
+				transition: "slide",
+				transitionSpeed: "fast",
+				slideNumber: true,
+				fragments: true,
+				fragmentInURL: true,
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
