@@ -19,7 +19,7 @@
 	</head>
 	<body>
 		<div class="reveal">
-			<div class="slides">
+			<div class="slides" data-separator-notes="^Notes:">
 				<section data-markdown>
                 ## Show-and-tell:
 
@@ -30,8 +30,15 @@
                 Cross Compass
 
                 2020 October 29
+
+                Notes:
+                In September I wrote and published this library on our
+                Cross Compass Github.
+
+                It's an implementation of Google Protocol Buffers for the
+                language Purescript.
                 </section>
-                <section data-markdown class=left>
+                <section data-markdown class=left data-separator-notes="^Notes:">
                 What is Google Protocol Buffers (“protobuf”)?
 
                 ### A way to specify a serialization for some structured data
@@ -39,14 +46,27 @@
                 In this way, protobuf is like YAML, except
                   * non-readable,
                   * must have a schema for the structure.
+
+                Notes:
+                The data is byte-wise, compact, and non-human readable.
+
+                The schema is readable.
+
+                So we can use protobuf for storage or transmission.
                 </section>
                 <section data-markdown class=left>
                 What is Google Protocol Buffers (“protobuf”)?
 
                 ### A way to generate code that can de/serialize protobuf “messages”
 
+                Notes:
                 Each programming language needs its own protobuf
                 implementation.
+
+                And this is the killer feature of protobuf.
+
+                Every language that implements protobuf is then a member of the
+                protobuf “ecosystem”.
                 </section>
                 <section data-markdown class=left>
                 What is Google Protocol Buffers (“protobuf”)?
@@ -97,6 +117,23 @@
                     </tbody>
                   </table>
                 </section>
+                <section data-markdown data-separator-notes="^Notes:">
+                What is a parser?
+
+                “a parser is just a function that consumes less-structured input and produces more-structured output.”
+
+                — Alexis King [*Parse, don’t validate*](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
+                
+                Notes:
+                  Everything that comes in over a process boundary is
+                  “less-structured” and should be parsed.
+
+                  And can fail.
+
+                  And can choose either one pattern or another.
+
+                  And provides proof of the structure in the type system.
+                </section>
                 <section data-markdown>
                 The __purescript-protobuf__ API centers the concept
                 of “monadic parsing”.
@@ -108,9 +145,11 @@
                 * __failure__ (the input cannot be parsed)
                 </section>
                 <section>
-                  <p>1998</p>
                 <img class=r-stretch data-src="assets/MonadicParsing.png"/>
                 <img data-src="assets/Atypeforparsers.png"/>
+                <aside class=notes>
+                  <p>1998</p>
+                </aside>
                 </section>
                 <section>
                 <img class=r-stretch data-src="assets/SeussFinal2.jpeg"/>
@@ -143,6 +182,7 @@
 				slideNumber: true,
 				fragments: true,
 				fragmentInURL: true,
+				showNotes: true,
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
