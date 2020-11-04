@@ -75,6 +75,14 @@
                 </section>
                 <section data-markdown>
                 ### [github.com/xc-jp/purescript-protobuf](https://github.com/xc-jp/purescript-protobuf)
+
+                Notes:
+                Here is an example from the README of a `.proto` spec file.
+
+                This `Rectangle` would serialize to an 18-byte message.
+
+                Each field has 1 byte for the type and fieldnumber, and eight
+                bytes for the double.
                 </section>
                 <section class=left>
                 <p>Cross Compass has the <b>only browser implementation</b>
@@ -102,6 +110,11 @@
                   <sup>2</sup>
                   </a>
                 </p>
+                <aside class=notes>
+                  <p>Why can't they conform?</p>
+
+                  <p>They're having trouble with decoding.</p>
+                </aside>
                 </section>
                 <section>
                   <p>Encoding is easy.</p>
@@ -113,9 +126,16 @@
                       <tr><td>validating</td><td>parsing</td></tr>
                       <tr><td>deserializing</td><td>parsing</td></tr>
                       <tr><td>lexing/tokenizing</td><td>parsing</td></tr>
-                      <tr><td>reading a message</td><td>parsing</td></tr>
+                      <tr><td>pattern matching</td><td>parsing</td></tr>
                     </tbody>
                   </table>
+                  <aside class=notes>
+                    <p>When we encode, we know we will always succeed.</p>
+                    <p>Any time new information is coming into our process from
+                      the outside world, we must parse it.</p>
+                    <p>The best essay which describes this idea is Parse Don't 
+                      Validate by Alexis King</p>
+                  </aside>
                 </section>
                 <section data-markdown data-separator-notes="^Notes:">
                 What is a parser?
@@ -123,7 +143,7 @@
                 “a parser is just a function that consumes less-structured input and produces more-structured output.”
 
                 — Alexis King [*Parse, don’t validate*](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
-                
+
                 Notes:
                   Everything that comes in over a process boundary is
                   “less-structured” and should be parsed.
@@ -135,29 +155,58 @@
                   And provides proof of the structure in the type system.
                 </section>
                 <section data-markdown>
-                The __purescript-protobuf__ API centers the concept
-                of “monadic parsing”.
+                __purescript-protobuf__ is built on the concept of “monadic parsing”
 
+                * Parsing monads for the implementation
+                * Parsing monads for the API
+
+                So what is a parsing monad?
+
+                </section>
+                <section data-markdown>
                 A parsing monad has
 
                 * __state__ (position in the input stream)
                 * __choice__ (we can accept either of two patterns here)
                 * __failure__ (the input cannot be parsed)
+
+                Notes:
+                Parsing monad are a very useful kind of
+                monad.
+
+                Any computer program which takes input can benefit from
+                parsing monads.
+
+                The whole purescript-protobuf decoding API is expressed as functions in the
+                `ParserT` monad.
+
                 </section>
                 <section>
                 <img class=r-stretch data-src="assets/MonadicParsing.png"/>
                 <img data-src="assets/Atypeforparsers.png"/>
                 <aside class=notes>
                   <p>1998</p>
+                  <p>If you think this is too prosaic, there is also a poetic version.</p>
                 </aside>
                 </section>
                 <section>
                 <img class=r-stretch data-src="assets/SeussFinal2.jpeg"/>
-                <p>
+                <p style="margin:0;">
                 — <a href="http://www.willamette.edu/~fruehr/haskell/seuss.html">Fritz Ruehr, Willamette University</a>
                 </p>
+                <p style="font-size:50%;margin-top:0;">See also <a href="https://vaibhavsagar.com/blog/2018/02/04/revisiting-monadic-parsing-haskell/">Revisiting Monadic Parsing in Haskell</a></p>
+                <aside class=notes>
+                  <p>Since 1998 we think about this slightly differently, see
+                  Vaibhav Sagar's <a href="https://vaibhavsagar.com/blog/2018/02/04/revisiting-monadic-parsing-haskell/">Revisiting Monadic Parsing in Haskell</a></p>
+                  <p>But the basic definition and insights still hold.</p>
+                </aside>
                 </section>
+                <section data-markdown>
+                  How did we write the only conforming purescript-protobuf
+                  implementation for the browser?
 
+                  By doing the decoding with __monadic parsers__
+                </section>
                 <section>
                 <h3>Make your profile Public, like Dennis</h3>
                 <img class="r-stretch" data-src="assets/GithubPeople.png"/>
@@ -182,7 +231,7 @@
 				slideNumber: true,
 				fragments: true,
 				fragmentInURL: true,
-				showNotes: true,
+				showNotes: false,
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
