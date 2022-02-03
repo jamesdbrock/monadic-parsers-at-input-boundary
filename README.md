@@ -1,6 +1,6 @@
 © James Brock 2022
 
-# Monadic Parsing at the Input Boundary
+# Monadic Parsers at the Input Boundary
 
 This is a presentation for
 [PureConf 2022 18 February](https://hasgeek.com/FP-Juspay/pureconf/)
@@ -8,8 +8,29 @@ about monadic parsers in general, and the
 [__purescript-parsing__](https://github.com/purescript-contrib/purescript-parsing)
 package in particular.
 
-It’s intended for an audience who has a little familiarity with monads and
-regular expressions, and who knows what an operating system “process” is.
+## Abstract
+
+When reading a byte stream over the process I/O boundary,
+the first thing which everyone should do is to parse the
+byte stream with a monadic parser.
+
+The talk will discuss
+
+- Processes and input byte streams.
+- Monadic parsers. What they are and why they matter.
+- The design and use of the
+  [__purescript-parsing__](https://pursuit.purescript.org/packages/purescript-parsing)
+  library.
+- How to use monadic parsers instead of regular expressions with the
+  [__purescript-parsing-replace__](https://pursuit.purescript.org/packages/purescript-parsing-replace)
+  library.
+- When not to use monadic parsers.
+
+This talk is intended for an audience who has some familiarity with monads and
+regular expressions. This talk is inspired and informed by the essay
+[Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
+by Alexis King.
+
 
 ## The Input Boundary
 
@@ -17,10 +38,10 @@ A process running on a computer is isolated from other processes on that
 computer, and from the rest of the world. On that process boundary,
 the process has input and output.
 The process views its inputs and outputs as either discrete events like
-signals and mouse clicks, or as byte streams. It can send byte streams to
-files or sockets, and it can receive byte streams from files or sockets.
+signals and mouse clicks, or as byte streams.
 
-A “byte stream” also includes filenames, web brower form field values, GIFs,
+The term “byte stream” includes any string-like thing, like filenames,
+web brower form field values, GIFs,
 or anything else represented in process memory as an array of bytes.
 
 Sending a byte stream is easy. We write a byte stream and we send it,
@@ -31,9 +52,12 @@ in the byte stream into a data structure in the process’s native language.
 Reading a byte stream is difficult, because there may be surprises. We
 expect the byte stream to have a certain structure, but it may not have that
 structure. A large portion of process bugs, crashes, and security vulnerabilities
-can be described as “misbehaving on suprises in an input byte stream.”
-It is the act of interpreting input byte streams that we want to focus on
-in this talk.
+can be characterized as a process misbehaving when it encounters suprises in
+an input byte stream.
+
+It is the act of reading input byte streams that we will focus on
+in this talk. We will be talking about Unicode strings, but
+everything in this talk will generalize to any kind of byte stream.
 
 In the year 2022, here are some common methods of interpreting an input byte
 stream.
@@ -50,9 +74,21 @@ stream.
    data into JSON than read a byte stream.
 3. Monadic parsers.
 
-I will try to convince you that method number 3 is always the first method you
+I will try to convince you that monadic parsers is always the first method you
 should reach for when reading a byte stream from over the process input
 boundary.
+
+## Monadic parsers
+
+A parsing monad 
+A parsing monad is a monad with three features: It knows its position in the
+input string. It can choose alternate parsing branches based on the contents
+of the input string. And it can fail.
+
+Let's look at an example of matching a pattern with a monadic parser.
+
+Here is the same pattern expressed with a
+
 
 
 

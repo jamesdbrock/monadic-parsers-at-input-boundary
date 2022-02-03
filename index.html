@@ -21,100 +21,13 @@
 		<div class="reveal">
 			<div class="slides" data-separator-notes="^Notes:">
 				<section data-markdown>
-                ## Show-and-tell:
-
-                # purescript-protobuf
+                # Monadic Parsers
+                # at the
+                # Input Boundary
 
                 James Brock
 
-                Cross Compass
-
-                2020 October 29
-
-                Notes:
-                In September I wrote and published this library on our
-                Cross Compass Github.
-
-                It's an implementation of Google Protocol Buffers for the
-                language Purescript.
-                </section>
-                <section data-markdown class=left data-separator-notes="^Notes:">
-                What is Google Protocol Buffers (“protobuf”)?
-
-                ### A way to specify a serialization for some structured data
-
-                In this way, protobuf is like YAML, except
-                  * non-readable,
-                  * must have a schema for the structure.
-
-                Notes:
-                The data is byte-wise, compact, and non-human readable.
-
-                The schema is readable.
-
-                So we can use protobuf for storage or transmission.
-                </section>
-                <section data-markdown class=left>
-                What is Google Protocol Buffers (“protobuf”)?
-
-                ### A way to generate code that can de/serialize protobuf “messages”
-
-                Notes:
-                Each programming language needs its own protobuf
-                implementation.
-
-                And this is the killer feature of protobuf.
-
-                Every language that implements protobuf is then a member of the
-                protobuf “ecosystem”.
-                </section>
-                <section data-markdown class=left>
-                What is Google Protocol Buffers (“protobuf”)?
-
-                ### A way to pass structured data between different programming languages.
-                </section>
-                <section data-markdown>
-                ### [github.com/xc-jp/purescript-protobuf](https://github.com/xc-jp/purescript-protobuf)
-
-                Notes:
-                Here is an example from the README of a `.proto` spec file.
-
-                This `Rectangle` would serialize to an 18-byte message.
-
-                Each field has 1 byte for the type and fieldnumber, and eight
-                bytes for the double.
-                </section>
-                <section class=left>
-                <p>Cross Compass has the <b>only browser implementation</b>
-                which passes the official <b>Google
-                Protocol Buffers conformance</b> test.
-                </p>
-                <p>
-                <a href="https://github.com/protocolbuffers/protobuf/blob/master/docs/third_party.md">
-                List of Protocol Buffer implementations
-                </a>
-                </p>
-                <p>
-                The official Google JS implementation doesn’t even try to conform
-                (can’t handle unknown fields).
-                <a href="https://developers.google.com/protocol-buffers/docs/reference/javascript-generated#message">
-                <sup>1</sup>
-                </a>
-                </p>
-                <p>
-                  <a href="https://github.com/protobufjs/protobuf.js">
-                  github.com/protobufjs/protobuf.js
-                  </a>
-                  tries to conform but they
-                  currently can’t pass the test.<a href="https://github.com/protobufjs/protobuf.js/pull/1380">
-                  <sup>2</sup>
-                  </a>
-                </p>
-                <aside class=notes>
-                  <p>Why can't they conform?</p>
-
-                  <p>They're having trouble with decoding.</p>
-                </aside>
+                PureConf 2022 February 18
                 </section>
                 <section>
                   <p>Encoding is easy.</p>
@@ -133,7 +46,7 @@
                     <p>When we encode, we know we will always succeed.</p>
                     <p>Any time new information is coming into our process from
                       the outside world, we must parse it.</p>
-                    <p>The best essay which describes this idea is Parse Don't 
+                    <p>The best essay which describes this idea is Parse Don't
                       Validate by Alexis King</p>
                   </aside>
                 </section>
@@ -155,31 +68,11 @@
                   And provides proof of the structure in the type system.
                 </section>
                 <section data-markdown>
-                __purescript-protobuf__ is built on the concept of “monadic parsing”
-
-                * Parsing monads for the implementation
-                * Parsing monads for the API
-
-                So what is a parsing monad?
-
-                </section>
-                <section data-markdown>
                 A parsing monad has
 
                 * __state__ (position in the input stream)
-                * __choice__ (we can accept either of two patterns here)
+                * __alternative__ (we can accept either of two patterns here)
                 * __failure__ (the input cannot be parsed)
-
-                Notes:
-                Parsing monad are a very useful kind of
-                monad.
-
-                Any computer program which takes input can benefit from
-                parsing monads.
-
-                The whole purescript-protobuf decoding API is expressed as functions in the
-                `ParserT` monad.
-
                 </section>
                 <section>
                 <img class=r-stretch data-src="assets/MonadicParsing.png"/>
@@ -201,15 +94,51 @@
                   <p>But the basic definition and insights still hold.</p>
                 </aside>
                 </section>
-                <section data-markdown>
-                  How did we write the only conforming protobuf
-                  implementation for the browser?
+                <section>
+                  <h2>Regular Expression</h2>
+                  <pre><code data-trim data-noescape>
+                  const ayebee = /a(b|B)/;
+                  "aB".match(ayebee);
+                  </code></pre>
+                  <pre><code data-trim data-noescape>
+                  'B'
+                  </code></pre>
+                  <h2>Parser</h2>
+                  <pre><code data-trim data-noescape>
+                  ayebee :: Parser String Char
+                  ayebee = do
+                    _ <- char 'a'
+                    b <- char 'b' <|> char 'B'
+                    pure b
 
-                  By doing the decoding with __monadic parsers__
+                  runParser "aB" ayebee
+                  </code></pre>
+                  <pre><code data-trim data-noescape>
+                  Right 'B'
+                  </code></pre>
                 </section>
                 <section>
-                <h3>Make your profile Public, like Dennis</h3>
-                <img class="r-stretch" data-src="assets/GithubPeople.png"/>
+                  <h2>Regular Expression</h2>
+                  <pre><code data-trim data-noescape>
+                  const ayebee = /a(b|B)/;
+                  "aB".match(ayebee);
+                  </code></pre>
+                  <pre><code data-trim data-noescape>
+                  'B'
+                  </code></pre>
+                  <h2>Parser</h2>
+                  <pre><code data-trim data-noescape>
+                  ayebee :: Parser String Boolean
+                  ayebee = do
+                    _ <- char 'a'
+                    b <- char 'b' <|> char 'B'
+                    pure (b == 'B')
+
+                  runParser "aB" ayebee
+                  </code></pre>
+                  <pre><code data-trim data-noescap>
+                  Right true
+                  </code></pre>
                 </section>
 			</div>
 		</div>
@@ -226,12 +155,16 @@
 				hash: true,
 				controls: false,
 				controlsTutorial: false,
-				transition: "slide",
-				transitionSpeed: "fast",
+                transition: "none",
+				// transition: "slide",
+				// transitionSpeed: "fast",
 				slideNumber: true,
 				fragments: true,
 				fragmentInURL: true,
 				showNotes: false,
+                // highlight: {
+                //   beforeHighlight: hljs => hljs.registerLanguage(/*...*/)
+                // }
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
