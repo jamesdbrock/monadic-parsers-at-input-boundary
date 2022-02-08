@@ -30,8 +30,8 @@
                 PureConf 2022 February 18
                 </section>
                 <section>
-                  <p>Encoding is easy.</p>
-                  <p>Decoding is hard, because of <b>choice</b> and <b>failure</b>.</p>
+                  <p>Serializing to a byte stream is easy.</p>
+                  <p>Deserializing from a byte stream is hard, because of <b>alternative</b> and <b>failure</b>.</p>
                   <table>
                     <tbody>
                       <thead><th>When we say</th><th>We mean</th></thead>
@@ -56,16 +56,6 @@
                 “a parser is just a function that consumes less-structured input and produces more-structured output.”
 
                 — Alexis King [*Parse, don’t validate*](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
-
-                Notes:
-                  Everything that comes in over a process boundary is
-                  “less-structured” and should be parsed.
-
-                  And can fail.
-
-                  And can choose either one pattern or another.
-
-                  And provides proof of the structure in the type system.
                 </section>
                 <section data-markdown>
                 A parsing monad has
@@ -138,6 +128,25 @@
                   </code></pre>
                   <pre><code data-trim data-noescap>
                   Right true
+                  </code></pre>
+                </section>
+                <section>
+                  <h2>Regular Expression</h2>
+
+                  <p>
+                  “99.99%” of RFC 5322 email addresses from http://emailregex.com/
+                  </p>
+
+                  <pre><code data-trim data-noescape>
+(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&
+'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-
+\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c
+\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?
+\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]
+|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|
+2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:
+(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|
+\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
                   </code></pre>
                 </section>
 			</div>

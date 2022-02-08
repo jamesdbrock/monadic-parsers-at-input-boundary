@@ -52,7 +52,7 @@ in the byte stream into a data structure in the process’s native language.
 Reading a byte stream is difficult, because there may be surprises. We
 expect the byte stream to have a certain structure, but it may not have that
 structure. A large portion of process bugs, crashes, and security vulnerabilities
-can be characterized as a process misbehaving when it encounters suprises in
+can be characterized as a process misbehaving when it encounters surprises in
 an input byte stream.
 
 It is the act of reading input byte streams that we will focus on
@@ -78,7 +78,36 @@ I will try to convince you that monadic parsers is always the first method you
 should reach for when reading a byte stream from over the process input
 boundary.
 
+
+
+## Parsing
+
+I'll read to you from the essay 
+[Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
+by Alexis King.
+
+> Consider: what is a parser? Really, a parser is just a function that consumes less-structured input and produces more-structured output. By its very nature, a parser is a partial function—some values in the (input) do not correspond to any value in the (output)—so all parsers must have some notion of failure.
+> 
+> Under this flexible definition, parsers are an incredibly powerful tool: they allow discharging checks on input up-front, right on the boundary between a program and the outside world, and once those checks have been performed, they never need to be checked again! Haskellers are well-aware of this power.
+> 
+> (A parser sits) on the boundary between your application and the external world. That world doesn’t speak in product and sum types, but in streams of bytes, so there’s no getting around a need to do some parsing. Doing that parsing up front, before acting on the data, can go a long way toward avoiding many classes of bugs, some of which might even be security vulnerabilities.
+
+
 ## Monadic parsers
+
+I’ll read to you the introduction to the paper
+[*Parsec: Direct Style Monadic Parser Combinators For The Real World*](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf) by Daan Leijen and Erik Meijer.
+
+> Parser combinators have always been a favorite topic amongst functional programmers. 
+> Burge already described a set of combinators in 1975 and they
+> have been studied extensively over the years by many others. 
+> 
+> In contrast to parser generators that offer a fixed
+> set of combinators to express grammars, these combinators are manipulated
+> as first class values and can be combined to define new combinators that fit
+> the application domain. Another advantage is that the programmer uses only
+> one language, avoiding the integration of different tools and languages (Hughes,
+> 1989).
 
 A parsing monad 
 A parsing monad is a monad with three features: It knows its position in the
@@ -91,6 +120,40 @@ Here is the same pattern expressed with a
 
 
 
+
+### Readability
+
+Here is another example of a pattern expressed with a regular expression.
+The author of this regular expression claims that it will be correct
+for 99.99% of RFC 5322 email addresses.
+
+He may be right about that, but how can we tell? 
+
+A monadic parser would be a much longer program, but it would be possible
+to read that program to determine if it is correct.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The parser syntax looks worse, why is it better?
+
+We can decide what to parse next depending on the value of what the B was.
+
+Make illegal states unrepresentable. A quick review of Parse, don't validate.
+
+Quick explanation of do-notation.
+
+Mention monad transformers, tie it into Jordan's talk
 
 
 
