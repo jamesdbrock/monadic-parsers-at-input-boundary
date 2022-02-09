@@ -35,20 +35,20 @@
                   <table>
                     <tbody>
                       <thead><th>When we say</th><th>We mean</th></thead>
+                      <tr><td>deserializing</td><td>parsing</td></tr>
                       <tr><td>decoding</td><td>parsing</td></tr>
                       <tr><td>validating</td><td>parsing</td></tr>
-                      <tr><td>deserializing</td><td>parsing</td></tr>
                       <tr><td>lexing/tokenizing</td><td>parsing</td></tr>
                       <tr><td>pattern matching</td><td>parsing</td></tr>
                     </tbody>
                   </table>
-                  <aside class=notes>
-                    <p>When we encode, we know we will always succeed.</p>
-                    <p>Any time new information is coming into our process from
-                      the outside world, we must parse it.</p>
-                    <p>The best essay which describes this idea is Parse Don't
-                      Validate by Alexis King</p>
-                  </aside>
+                </section>
+                <section data-markdown data-separator-notes="^Notes:">
+                  ### Popular ways to deserialize a byte stream
+                  * Write an ad-hoc parser based on string splitting and regular expressions
+                  * Use a parser generator or parsing library like YACC or
+                      Google Protocol Buffers or JSON
+                  * __Monadic parser combinators__
                 </section>
                 <section data-markdown data-separator-notes="^Notes:">
                 What is a parser?
@@ -56,6 +56,23 @@
                 “a parser is just a function that consumes less-structured input and produces more-structured output.”
 
                 — Alexis King [*Parse, don’t validate*](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
+                </section>
+                <section data-markdown data-separator-notes="^Notes:">
+                “Use a data structure that makes illegal states unrepresentable.”
+
+                — Alexis King [*Parse, don’t validate*](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
+                </section>
+                <section data-markdown>
+                “In contrast to parser generators that offer a fixed
+                set of combinators to express grammars, these combinators are manipulated
+                as first class values and can be combined to define new combinators that fit
+                the application domain.”
+
+                “Another advantage is that the programmer uses only
+                one language”
+
+                — Daan Leijen and Erik Meijer
+                [*Parsec: Direct Style Monadic Parser Combinators For The Real World*](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf)
                 </section>
                 <section data-markdown>
                 A parsing monad has
