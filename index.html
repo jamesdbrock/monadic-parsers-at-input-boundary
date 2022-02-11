@@ -33,8 +33,8 @@
                   <p>Serializing to a byte stream is easy.</p>
                   <p>Deserializing from a byte stream is hard, because of <b>alternative</b> and <b>failure</b>.</p>
                   <table>
+                    <thead><th>When we say</th><th>We mean</th></thead>
                     <tbody>
-                      <thead><th>When we say</th><th>We mean</th></thead>
                       <tr><td>deserializing</td><td>parsing</td></tr>
                       <tr><td>decoding</td><td>parsing</td></tr>
                       <tr><td>validating</td><td>parsing</td></tr>
@@ -44,7 +44,7 @@
                   </table>
                 </section>
                 <section data-markdown data-separator-notes="^Notes:">
-                  ### Popular ways to deserialize a byte stream
+                  ### Popular ways to parse a byte stream
                   * Write an ad-hoc parser based on string splitting and regular expressions
                   * Use a parser generator or parsing library like YACC or
                       Google Protocol Buffers or JSON
