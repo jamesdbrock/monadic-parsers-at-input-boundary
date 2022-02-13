@@ -346,7 +346,10 @@ Okay, that’s a little bit hard. It’s not quite as simple as we might have
 expected, but it’s not too bad.
 
 Let’t think about what it says. The forward slashes mean “alternative” which
-means either/or. The square brackets mean that something is optional.
+means either/or.
+
+The square brackets mean that something is optional, so it's okay if that
+thing is missing.
 
 First it says that an address is either a mailbox or a group.
 
@@ -371,17 +374,52 @@ Fraser Tweedale and published in the Haskell library __purebred-email__.
 
 That looks a lot like the IETF specification. Let's compare them line by line.
 
+### (slide)
+
+First the spec says that an address is either a mailbox or a group.
+
+The monadic parser says that an address is either a group or a single mailbox.
+
+So the order of the alternative was flipped, but that’s fine. I’m sure
+Fraser Tweedale had good reasons for doing that.
+
+Next, the spec says that a mailbox is either a name-addr or an addr-spec.
+
+In the monadic parser I see addressSpec on the right side of the
+alternative, and that expression on the left side must equivalent to a
+name-addr, I guess.
+
+Next, the spec says that an angleAddr is this addr-spec expression,
+surrounded by angle bracket characters and optional Comment Folding
+White Space expressions. Or, alternatively an obs-angle-addr.
+
+The monadic parser says basically the same thing.
+I don’t see the obs-angle-addr alternative in the monadic parser for
+angleAddr. Maybe we should open an issue with Fraser Tweedale and ask him about this.
+
+Finally the spec says that a mailbox-list is either a comma-separated list
+of mailboxes, or alternately an obs-mbox-list.
+
+And the monadic parser also says that a mailboxList is a comma-separated list of
+mailboxes. Again the monadic parser omits the alternative, I don't know why.
+
+The point is that the formal spec for RFC 5322 and the monadic parser
+implemented in Haskell are very similar. We can see what the monadic parser
+is doing, and we can ask ourselves reasonable questions about the
+implementation.
+
+Next let’s look at the same RFC 5322 spec implemented as a regular expression.
+
 
 ### (slide)
 
-Here is another example of a pattern expressed with a regular expression.
 The author of this regular expression claims that it quote
  “99.99% works” for parsing RFC 5322 email addresses.
 
 He may be right about that, but how can we tell?
 
-The monadic parser is a longer program, but it is possible to inspect the
-program and understand how it works.
+The regular expression for RFC 5322 is shorter than the monadic parser, but it’s very
+difficult to read it or make improvements.
 
 
 

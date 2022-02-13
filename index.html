@@ -104,16 +104,16 @@
                 </section>
 
                 <section>
-                  <h2>Regular Expression</h2>
-                  <pre><code data-trim data-noescape>
+                  <h2>Regular expression</h2>
+                  <pre><code data-trim data-noescape class="language-javascript">
                   const ayebee = /a(b|B)/;
                   "aB".match(ayebee);
                   </code></pre>
-                  <pre><code data-trim data-noescape>
+                  <pre><code data-trim data-noescape class="language-javascript">
                   'B'
                   </code></pre>
-                  <h2>Parser</h2>
-                  <pre><code data-trim data-noescape>
+                  <h2>PureScript monadic parser</h2>
+                  <pre><code data-trim data-noescape class="language-haskell">
                   ayebee :: Parser String Char
                   ayebee = do
                     _ <- char 'a'
@@ -122,22 +122,22 @@
 
                   runParser "aB" ayebee
                   </code></pre>
-                  <pre><code data-trim data-noescape>
+                  <pre><code data-trim data-noescape class="language-haskell">
                   Right 'B'
                   </code></pre>
                 </section>
 
                 <section>
-                  <h2>Regular Expression</h2>
-                  <pre><code data-trim data-noescape>
+                  <h2>Regular expression</h2>
+                  <pre><code data-trim data-noescape class="language-javascript">
                   const ayebee = /a(b|B)/;
                   "aB".match(ayebee);
                   </code></pre>
-                  <pre><code data-trim data-noescape>
+                  <pre><code data-trim data-noescape class="language-javascript">
                   'B'
                   </code></pre>
-                  <h2>Parser</h2>
-                  <pre><code data-trim data-noescape>
+                  <h2>PureScript monadic parser</h2>
+                  <pre><code data-trim data-noescape class="language-haskell">
                   ayebee :: Parser String Boolean
                   ayebee = do
                     _ <- char 'a'
@@ -146,22 +146,22 @@
 
                   runParser "aB" ayebee
                   </code></pre>
-                  <pre><code data-trim data-noescap>
+                  <pre><code data-trim data-noescape class="language-haskell">
                   Right true
                   </code></pre>
                 </section>
 
                 <section>
-                  <h2>Regular Expression</h2>
-                  <pre><code data-trim data-noescape>
+                  <h2>Regular expression</h2>
+                  <pre><code data-trim data-noescape class="language-javascript">
                   const ayebee = /a(b|B)/;
                   "aB".match(ayebee);
                   </code></pre>
-                  <pre><code data-trim data-noescape>
+                  <pre><code data-trim data-noescape class="language-javascript">
                   'B'
                   </code></pre>
-                  <h2>Parser</h2>
-                  <pre><code data-trim data-noescape>
+                  <h2>PureScript monadic parser</h2>
+                  <pre><code data-trim data-noescape class="language-haskell">
                   ayebee :: Parser String Boolean
                   ayebee = do
                     _ <- char 'a'
@@ -170,13 +170,13 @@
 
                   runParser "aXXX" ayebee
                   </code></pre>
-                  <pre><code data-trim data-noescape>
+                  <pre><code data-trim data-noescape class="language-haskell">
                   Left (ParseError "Expected 'B'" (Position { column: 2 }))
                   </code></pre>
                 </section>
 
                 <section>
-                  <h2>RFC 5322 email addresses</h2>
+                  <h2>RFC 5322 email address</h2>
 
                   https://datatracker.ietf.org/doc/html/rfc5322#page-16
 
@@ -210,12 +210,12 @@
 
 
                 <section>
-                  <h2>RFC 5322 email addresses</h2>
+                  <h2>RFC 5322 email address</h2>
                   <ul>
                     <li>Monadic parser for RFC 5322 email addresses</li>
                     <li>from Haskell <b>purebred-email</b> by Fraser Tweedale</li>
                   </ul>
-                  <pre style="font-size:35%;"><code data-trim data-noescape>
+                  <pre style="font-size:35%;"><code data-trim data-noescape class="language-haskell">
                     address = group <|> Single <$> mailbox
 
                     mailbox = Mailbox <$> optional displayName <*> angleAddr <|> Mailbox Nothing <$> addressSpec
@@ -241,26 +241,32 @@
                 </section>
 
                 <section>
-                  <h2>RFC 5322 email addresses</h2>
+                  <h2>RFC 5322 email address</h2>
 
                   <pre style="font-size:40%;">
   address         =   mailbox / group</pre>
-                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape>
+                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape class="language-haskell">
                     address = group <|> Single <$> mailbox
                   </code></pre>
 
                   <pre style="font-size:40%;">
   mailbox         =   name-addr / addr-spec</pre>
-                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape>
+                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape class="language-haskell">
                     mailbox = Mailbox <$> optional displayName <*> angleAddr <|> Mailbox Nothing <$> addressSpec
                   </code></pre>
 
                   <pre style="font-size:40%;">
   angle-addr      =   [CFWS] "<" addr-spec ">" [CFWS] /
                     obs-angle-addr</pre>
-                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape>
+                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape class="language-haskell">
                     angleAddr = optionalCFWS *> char '<' *> addressSpec <* char '>' <* optionalCFWS
                   </code></pre>
+
+                  <pre style="font-size:40%;">
+  mailbox-list    =   (mailbox *("," mailbox)) / obs-mbox-list</pre>
+                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape class="language-haskell">
+                    mailboxList = mailbox `sepBy` char ','
+                    </code></pre>
 
                 </section>
 
@@ -306,9 +312,9 @@
 				fragments: true,
 				fragmentInURL: true,
 				showNotes: false,
-                // highlight: {
-                //   beforeHighlight: hljs => hljs.registerLanguage(/*...*/)
-                // }
+        // highlight: {
+        //   beforeHighlight: hljs => hljs.registerLanguage(/*...*/)
+        // }
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
