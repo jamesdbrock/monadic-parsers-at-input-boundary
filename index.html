@@ -211,9 +211,66 @@
 
                 <section>
                   <h2>RFC 5322 email addresses</h2>
-                  <p>
-                  Regular expression for “99.99%” of RFC 5322 email addresses from http://emailregex.com/
-                  </p>
+                  <ul>
+                    <li>Monadic parser for RFC 5322 email addresses</li>
+                    <li>from Haskell <b>purebred-email</b> by Fraser Tweedale</li>
+                  </ul>
+                  <pre style="font-size:35%;"><code data-trim data-noescape>
+                    address = group <|> Single <$> mailbox
+
+                    mailbox = Mailbox <$> optional displayName <*> angleAddr <|> Mailbox Nothing <$> addressSpec
+
+                    readMailbox = parseOnly (mailbox <* endOfInput) . T.pack
+
+                    angleAddr = optionalCFWS *> char '<' *> addressSpec <* char '>' <* optionalCFWS
+
+                    group = Group <$> displayName <* char ':' <*> mailboxList <* char ';' <* optionalCFWS
+
+                    displayName = phrase
+
+                    mailboxList = mailbox `sepBy` char ','
+
+                    addressList = address `sepBy` char ','
+
+                    addressSpec = AddrSpec <$> (T.encodeUtf8 <$> localPart) <*> (char '@' *> domain)
+
+                    domain = (DomainDotAtom . fmap (mk . T.encodeUtf8) <$> dotAtom)
+                             <|> (DomainLiteral . T.encodeUtf8 <$> domainLiteral)
+                  </code></pre>
+
+                </section>
+
+                <section>
+                  <h2>RFC 5322 email addresses</h2>
+
+                  <pre style="font-size:40%;">
+  address         =   mailbox / group</pre>
+                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape>
+                    address = group <|> Single <$> mailbox
+                  </code></pre>
+
+                  <pre style="font-size:40%;">
+  mailbox         =   name-addr / addr-spec</pre>
+                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape>
+                    mailbox = Mailbox <$> optional displayName <*> angleAddr <|> Mailbox Nothing <$> addressSpec
+                  </code></pre>
+
+                  <pre style="font-size:40%;">
+  angle-addr      =   [CFWS] "<" addr-spec ">" [CFWS] /
+                    obs-angle-addr</pre>
+                  <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape>
+                    angleAddr = optionalCFWS *> char '<' *> addressSpec <* char '>' <* optionalCFWS
+                  </code></pre>
+
+                </section>
+
+                <section>
+                  <h2>RFC 5322 email addresses</h2>
+                  <ul>
+                  <li>Regular expression for RFC 5322 email addresses</li>
+                  <li>from http://emailregex.com/</li>
+                  <li>“99.99% works”</li>
+                  </ul>
 
                   <pre><code data-trim data-noescape>
 (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&
@@ -226,38 +283,6 @@
 (?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|
 \\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
                   </code></pre>
-                </section>
-                <section>
-                  <h2>RFC 5322 email addresses</h2>
-                  <p>
-                    RFC 5322 email address parser
-                    from the Haskell library <b>purebred-email</b> by Fraser Tweedale
-                  </p>
-                  <pre style="font-size:35%;"><code data-trim data-noescape>
-                    mailbox = Mailbox <$> optional displayName <*> angleAddr <|> Mailbox Nothing <$> addressSpec
-
-                    readMailbox = parseOnly (mailbox <* endOfInput) . T.pack
-
-                    phrase = foldMany1Sep (singleton ' ') word
-
-                    displayName = phrase
-
-                    mailboxList = mailbox `sepBy` char ','
-
-                    addressList = address `sepBy` char ','
-
-                    group = Group <$> displayName <* char ':' <*> mailboxList <* char ';' <* optionalCFWS
-
-                    address = group <|> Single <$> mailbox
-
-                    angleAddr = optionalCFWS *> char '<' *> addressSpec <* char '>' <* optionalCFWS
-
-                    addressSpec = AddrSpec <$> (T.encodeUtf8 <$> localPart) <*> (char '@' *> domain)
-
-                    domain = (DomainDotAtom . fmap (mk . T.encodeUtf8) <$> dotAtom)
-                             <|> (DomainLiteral . T.encodeUtf8 <$> domainLiteral)
-                  </code></pre>
-
                 </section>
 			</div>
 		</div>

@@ -337,17 +337,52 @@ for the error. The error says that it failed to parse because it was
 expecting a ‘B’ character at position 2.
 
 
+### (slide)
+
+Let’s parse something a little bit harder. How about an email address?
+Here is the complete Internet
+Engineering Task Force specification for the format of an email address.
+Okay, that’s a little bit hard. It’s not quite as simple as we might have
+expected, but it’s not too bad.
+
+Let’t think about what it says. The forward slashes mean “alternative” which
+means either/or. The square brackets mean that something is optional.
+
+First it says that an address is either a mailbox or a group.
+
+Then it says that a mailbox is either a name-addr or an addr-spec.
+
+Then it says that a name-addr is an optional display-name followed by
+an angle-addr.
+
+Then it says that an angle-addr is an optional Comment Folding White Space
+followed by a left-angle-bracket character followed by an addr-spec followed by a
+right-angle-bracket character followed by an optional Comment Folding White
+Space. Or, alternately, it can be an obs-angle-addr.
+
+And it goes on like this.
+
+Can we write a monadic parser to parse an email address?
+
+### (slide)
+
+Here is a monadic parser for parsing IETF email addresses, written by
+Fraser Tweedale and published in the Haskell library __purebred-email__.
+
+That looks a lot like the IETF specification. Let's compare them line by line.
+
 
 ### (slide)
 
 Here is another example of a pattern expressed with a regular expression.
-The author of this regular expression claims that it will be correct
-for 99.99% of RFC 5322 email addresses.
+The author of this regular expression claims that it quote
+ “99.99% works” for parsing RFC 5322 email addresses.
 
 He may be right about that, but how can we tell?
 
-A monadic parser would be a much longer program, but it would be possible
-to read that program to determine if it is correct.
+The monadic parser is a longer program, but it is possible to inspect the
+program and understand how it works.
+
 
 
 
