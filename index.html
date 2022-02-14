@@ -70,37 +70,11 @@
                 — Alexis King [*Parse, don’t validate*](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
                 </section>
                 <section data-markdown>
-                “In contrast to parser generators that offer a fixed
-                set of combinators to express grammars, these combinators are manipulated
-                as first class values and can be combined to define new combinators that fit
-                the application domain.”
-
-                “Another advantage is that the programmer uses only
-                one language”
-
-                — Daan Leijen and Erik Meijer
-                [*Parsec: Direct Style Monadic Parser Combinators For The Real World*](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf)
-                </section>
-                <section data-markdown>
                 A parsing monad has three features:
 
-                * __state__ (position in the input stream)
-                * __alternative__ (we can accept either of two patterns here)
+                * __state__ (position in the input string)
+                * __alternative__ (accept either of two patterns here)
                 * __failure__ (the input cannot be parsed)
-                </section>
-                <section>
-                <img class=r-stretch data-src="assets/MonadicParsing.png"/>
-                <img data-src="assets/Atypeforparsers.png"/>
-                <aside class=notes>
-                  <p>1998</p>
-                  <p>If you think this is too prosaic, there is also a poetic version.</p>
-                </aside>
-                </section>
-                <section>
-                <img class=r-stretch data-src="assets/SeussFinal2.jpeg"/>
-                <p style="margin:0;">
-                — <a href="http://www.willamette.edu/~fruehr/haskell/seuss.html">Fritz Ruehr, Willamette University</a>
-                </p>
                 </section>
 
                 <section>
@@ -322,14 +296,14 @@
                 </section>
 
                 <section>
-                  <h2>RFC 5322 email addresses</h2>
+                  <h2>RFC 5322 email address</h2>
                   <ul>
                   <li>Regular expression for RFC 5322 email addresses</li>
                   <li>from http://emailregex.com/</li>
                   <li>“99.99% works”</li>
                   </ul>
 
-                  <pre><code data-trim data-noescape>
+                  <pre><code data-trim data-noescape class="language-none">
 (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&
 '*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-
 \x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c
@@ -361,6 +335,71 @@
                   </code></pre>
                 </section>
 
+                <section data-markdown>
+                “In contrast to parser generators that offer a fixed
+                set of combinators to express grammars, these combinators are manipulated
+                as first class values and can be combined to define new combinators that fit
+                the application domain.”
+
+                “Another advantage is that the programmer uses only
+                one language”
+
+                — Daan Leijen and Erik Meijer
+                [*Parsec: Direct Style Monadic Parser Combinators For The Real World*](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf)
+                </section>
+
+                <section>
+                <img class=r-stretch data-src="assets/MonadicParsing.png"/>
+                <img data-src="assets/Atypeforparsers.png"/>
+                <aside class=notes>
+                  <p>1998</p>
+                  <p>If you think this is too prosaic, there is also a poetic version.</p>
+                </aside>
+                </section>
+
+                <section>
+                <img class=r-stretch data-src="assets/SeussFinal2.jpeg"/>
+                <p style="margin:0;">
+                — <a href="http://www.willamette.edu/~fruehr/haskell/seuss.html">Fritz Ruehr, Willamette University</a>
+                </p>
+                </section>
+
+                <section>
+                  <div style="display:flex;justify-content:space-between">
+                    <div>
+                  <h3>PureScript parsers</h3>
+                  <h3><span style="color:red">50× slower</span> than</h3>
+                  <h3>JavaScript regex</h3>
+                    </div>
+                    <div>
+                    </div>
+                  </div>
+                </section>
+                <section>
+                  <div style="display:flex;justify-content:space-between;">
+                    <div>
+                  <h3>PureScript parsers</h3>
+                  <h3><span style="color:red">50× slower</span> than</h3>
+                  <h3>JavaScript regex</h3>
+                    </div>
+                    <div>
+                      <h3>Haskell parsers</h3>
+                      <h3>about the same</h3>
+                      <h3>speed as regex</h3>
+                    </div>
+                  </div>
+                </section>
+
+                <section>
+                  Input ⟶
+                  <span style="display:inline-block;border:4px black solid;padding:12px;margin:-10px;height:300px">
+                    <span style="position:relative;top:53px;width:140px;display:inline-block;color:rgb(160, 6, 121);border:4px rgb(160, 6, 121) solid; padding:12px;margin-left:-12px;">
+                  Monadic parsers go here
+                    </span>
+                    Process
+                  </span>
+                  ⟶ Output
+                </section>
 			</div>
 		</div>
 

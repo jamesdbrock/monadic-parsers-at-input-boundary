@@ -142,65 +142,6 @@ we have provided a proof that our input byte stream in in some sense ”legal.�
 
 The easiest way to do this is with monadic parsers.
 
-### (slide) 2:30
-
-I’ll read to you from the introduction to the paper
-[*Parsec: Direct Style Monadic Parser Combinators For The Real World*](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf) by Daan Leijen and Erik Meijer.
-
-> Parser combinators have always been a favorite topic amongst functional programmers.
-> Burge already described a set of combinators in 1975 and they
-> have been studied extensively over the years by many others.
->
-> In contrast to parser generators that offer a fixed
-> set of combinators to express grammars, these combinators are manipulated
-> as first class values and can be combined to define new combinators that fit
-> the application domain. Another advantage is that the programmer uses only
-> one language, avoiding the integration of different tools and languages (Hughes,
-> 1989).
-
-This is one of the key points about monadic parsers: They are written in
-normal PureScript. Parsing input is such a hard problem that when people
-want to do it they traditionally use a whole domain-specific language for parsing.
-The most famous domain-specific language for parsing is regular expressions,
-but there are many others.
-
-There has long been a tradition of general-purpose languages which are so weak
-that it's impossible to write anything in them which is slightly hard, like
-parsing an input byte stream.
-
-The whole point of the Perl programming language is that it’s a weak
-imperative-style language with regular expressions built-in so that we
-can use regular expressions for parsing input byte streams.
-That’s the whole point of Perl.
-
-But it doesn’t really solve the problem in a satisfactory way. When our
-computer program consists of two different languages, then we have the usual
-problem of language interoperation. And the usual solution to language
-interoperation is to pass strings. A regular expression can “capture” a pattern
-in a string, but then it returns the captured pattern back to the host
-language as a string. And then what do we do with the string? We still
-have to turn the captured string into a data structure.
-
-Suppose I want to extract an integer out of some input string. I write a regular
-expression which finds integer-looking substrings and run it on the input
-string. The regular expression finds a match and returns the captured substring.
-Then I run a string-to-integer conversion function on the captured substring,
-and the string-to-integer conversion function fails. What then? Was the captured
-substring an integer, or wasn't it?
-
-In monadic parsers, we turn the string into a data structure in our native
-language during the parse, so there is no ambiguity about whether or not
-the input string was legal. In this case the “data structure” is an integer.
-That is a very simple data structure, but it is a data structure. If we have
-a thing which is not an integer then we can’t represent it as an integer,
-so producing an instance of the integer data structure provides a proof that the
-input string was legal.
-
-Monadic parsers allow us to match patterns in normal PureScript instead
-of using a domain-specific parsing language like regular expressions.
-And after we have matched a pattern we produce a data structure which
-preserves the proof that the input string was legal.
-
 ### (slide) 0:30
 
 A parsing monad is a monad with three features: It knows its position in the
@@ -209,48 +150,9 @@ of the input string. And it can fail in the case that the input string
 is illegal and cannot be parsed.
 
 There are many implementations of monadic parser combinators in many languages,
-and all of them have these three features.
-
-### (slide) 0:45
-
-Here is the type for a monadic parser.
-
-This is an excerpt from the 1998 paper FUNCTIONAL PEARLS
-*Monadic Parsing in Haskell* by Graham Hutton and Erik Meijer.
-
-On the bottom line is says that
-the type of a parser for a data type `a` is a function from a string to a list
-of pairs of an `a` and a string.
-
-This simple type definition tells us pretty much everything we need to know
-about monadic parsers. Like all good math it has a simple definition but complicated
-and far-reaching implications. Modern monadic parser libraries usually
-don't use this exact type definition for a parser, but they use definitions
-which are equivalent.
-
-The essay
-[*Revisiting Monadic Parsing in Haskell*](https://vaibhavsagar.com/blog/2018/02/04/revisiting-monadic-parsing-haskell/)
-by Vaibhav Sagar has some good discussion about that.
-
-### (slide) 0:30
-
-If that last definition was too prosaic for you then, here is the same
-definition expressed as a poem, by Fritz Ruehr.
-
-Dr. Seuss on Parser Monads:
-
-> A Parser for Things
->
-> is a function from Strings
->
-> to Lists of Pairs
->
-> of Things and Strings!
-
-Ok that's enough theory. We’ll stop at the Doctor Seuss level of parsing
-theory. We don’t actually need to know any theory
-to use monadic parsers, but now you know that the theory exists and
-that the theory has been pretty well-established since the 1990s.
+and all of them have these three features. These three features are necessary
+for a parsing monad, and they are also sufficient. Any monad which has these
+three features is a parsing monad.
 
 ### (slide) 2:00
 
@@ -580,8 +482,8 @@ and publish it in a library so that other people can avoid making the same
 mistake. Of course, regular expression libraries do exist, and they contain
 useful patterns like the email regular expression which we saw before. But
 they really don't compose very well. The only way to compose regular
-expressions together is to concatenate the regular expression strings
-at runtime. This is because, again, regular expressions are a whole
+expressions together is to concatenate the regular expression strings.
+This is because, again, regular expressions are a whole
 domain specific language which is embedded in some other host language.
 Regular expressions don't have any of the composition features like
 functions and modules that we expect from general-purpose programming
@@ -594,6 +496,108 @@ Remember that the term ”parser combinator” just means a function
 which takes some parsers as arguments and then returns a new parser.
 
 
+### (slide) 2:30
+
+I’ll read to you from the introduction to the paper
+[*Parsec: Direct Style Monadic Parser Combinators For The Real World*](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf) by Daan Leijen and Erik Meijer.
+
+> Parser combinators have always been a favorite topic amongst functional programmers.
+> Burge already described a set of combinators in 1975 and they
+> have been studied extensively over the years by many others.
+>
+> In contrast to parser generators that offer a fixed
+> set of combinators to express grammars, these combinators are manipulated
+> as first class values and can be combined to define new combinators that fit
+> the application domain. Another advantage is that the programmer uses only
+> one language, avoiding the integration of different tools and languages (Hughes,
+> 1989).
+
+I want to repeat one of the key points about monadic parsers: They are written in
+normal PureScript. Parsing input is such a hard problem that when people
+want to do it they traditionally use a whole domain-specific language for parsing.
+The most famous domain-specific language for parsing is regular expressions,
+but there are many others.
+
+There has long been a tradition of general-purpose languages which are so weak
+that it's impossible to write anything in them which is slightly hard, like
+parsing an input byte stream.
+
+The whole point of the Perl programming language is that it’s a weak
+imperative-style language with regular expressions built-in so that we
+can use regular expressions for parsing input byte streams.
+That’s the whole point of Perl.
+
+But it doesn’t really solve the problem in a satisfactory way. When our
+computer program consists of two different languages, then we have the usual
+problem of language interoperation. And the usual solution to language
+interoperation is to pass strings. A regular expression can “capture” a pattern
+in a string, but then it returns the captured pattern back to the host
+language as a string. And then what do we do with the string? We still
+have to turn the captured string into a data structure.
+
+Remember that we looked at the problem of extracting integers out of some input string.
+We wrote a regular
+expression which found integer-looking substrings and we ran it on the input
+string. The regular expression found some matches and returned the captured substrings.
+Suppose we then ran a string-to-integer conversion function on a captured substring,
+and the string-to-integer conversion function failed. What then? Was the captured
+substring a legal integer string, or wasn't it?
+
+In monadic parsers, we turn the string into a data structure in our native
+language during the parse, so there is no ambiguity about whether or not
+the input string was legal. In this case the “data structure” is an integer.
+That is a very simple data structure, but it is a data structure. If we have
+a thing which is not an integer then we can’t represent it as an integer,
+so producing an instance of the integer data structure provides a proof that the
+input string was legal.
+
+Monadic parsers allow us to match patterns in normal PureScript instead
+of using a domain-specific parsing language like regular expressions.
+And after we have matched a pattern we produce a data structure which
+preserves the proof that the input string was legal.
+
+### (slide) 0:45
+
+Here is a type for a monadic parser.
+
+This is an excerpt from the 1998 paper FUNCTIONAL PEARLS
+*Monadic Parsing in Haskell* by Graham Hutton and Erik Meijer.
+
+On the bottom line is says that
+the type of a parser for a data type `a` is a function from a string to a list
+of pairs of an `a` and a string.
+
+This simple type definition tells us pretty much everything we need to know
+about monadic parsers, after we spend some time thinking about it.
+Like all good math it has a simple definition but complicated
+and far-reaching implications. Modern monadic parser libraries usually
+don't use this exact type definition for a parser, but they use definitions
+which are equivalent.
+
+The essay
+[*Revisiting Monadic Parsing in Haskell*](https://vaibhavsagar.com/blog/2018/02/04/revisiting-monadic-parsing-haskell/)
+by Vaibhav Sagar has some good discussion about that.
+
+### (slide) 0:30
+
+If that last definition was too prosaic for you then, here is the same
+definition expressed as a poem, by Fritz Ruehr.
+
+Dr. Seuss on Parser Monads:
+
+> A Parser for Things
+>
+> is a function from Strings
+>
+> to Lists of Pairs
+>
+> of Things and Strings!
+
+Ok that's enough theory. We’ll stop at the Doctor Seuss level of parsing
+theory. We don’t actually need to know any theory
+to use monadic parsers, but now you know that the theory exists and
+that the theory and techniques have been pretty well-established since the 1990s.
+
 
 
 
@@ -601,8 +605,8 @@ which takes some parsers as arguments and then returns a new parser.
 
 Speed.
 
-You can expect a monadic parser to run about a hundred times slower than
-a regular expression.
+You can expect a PureScript monadic parser to run about fifty times slower
+than a JavaScript regular expression.
 
 If you recognize Noam Chomsky and you know something about the Chomsky
 hierarchy, then you know that there are certain speed optimizations which
