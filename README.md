@@ -600,11 +600,7 @@ to use monadic parsers, but now you know that the theory exists and
 that the theory and techniques have been pretty well-established since the 1990s.
 
 
-
-
-
 ### (slide)
-Speed.
 
 In a JavaScript runtime environment, you can expect a PureScript monadic
 parser to run at least 10 times slower
@@ -623,13 +619,13 @@ There are Haskell monadic parsing libraries such as Attoparsec which run
 very fast, about as fast as regular expressions, sometimes faster.
 
 So if you learn these monadic parsing techniques then you can apply them
-in native execution environments very well.
+in other execution environments very well.
 
 
 ### (slide)
 
 Whenever your process receives an input byte stream, the first thing you
-should do is to parse that byte stream and turn it into a data structure.
+should do is to parse that byte stream into a data structure.
 
 Monadic parsers are the easiest and most effective way to do that.
 
