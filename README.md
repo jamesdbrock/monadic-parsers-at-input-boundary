@@ -250,7 +250,7 @@ Dr. Seuss on Parser Monads:
 Ok that's enough theory. We’ll stop at the Doctor Seuss level of parsing
 theory. We don’t actually need to know any theory
 to use monadic parsers, but now you know that the theory exists and
-that the theory been pretty well-established since the 1990s.
+that the theory has been pretty well-established since the 1990s.
 
 ### (slide) 2:00
 
@@ -333,14 +333,87 @@ illegal string `"aXXX"` and instead of returning `Right` and a
 for the error. The error says that it failed to parse because it was
 expecting a ‘B’ character at position 2.
 
-So we can see that this regular expression and this monadic parser
-both solve the same pattern matching problem.
+
+### (slide) 1:30
+
+When we’re parsing patterns out of a string, a common thing to want to do
+is pattern repetition.
+
+Let’s try repeating the a-b pattern.
+
+We added the asterisk quantifier to the regular expression to repeat the pattern
+many times.
+
+We also defined a new parser named `ayebeeMany`.
+The `ayebeeMany` parser uses the `many` parser combinator to match the `ayebee`
+pattern many times.
+
+Let’s talk about what we mean by a parser combinator.
+
+A parser combinator is a normal PureScript function. It is a function which
+takes a `Parser` as an argument and then returns a new `Parser`.
+The type of the data structure produced by the new parser may be different.
+
+In this example you can see that the `ayebee` parser has
+type `Parser String Boolean` because it is a parser from a string to a boolean.
+
+We passed the `ayebee` parser as an argument
+to the `many` parser combinator, and the `many` parser combinator returned
+a new parser with type `Parser String (Array Boolean)`.
+
+The data structure produced by the new parser will be an array of booleans.
+
+So we run this new `ayebeeMany` parser and it matches the ayebee pattern
+as many times at it can on the input string, and then returns an
+array which is true for each of the matched ayebee patterns which had an uppercase
+‘B’ character.
+
+Parser combinators may take more than one parser argument.
+For example, the alternative operator which we are using in the ayebee parser to match
+either a lowercase ‘b’ character or an uppercase ‘B’ character is also, in fact,
+a parser combinator. That alternative binary operator is a function
+which takes two arguments, a left parser and a right parser. It returns a new
+parser which tries first the left parser and then tries the right parser.
+
+So parsers call parser combinators and pass parsers as arguments to the
+parser combinators which return new parsers. This is how we build up
+parsers for complicated pattern matching.
+
+Let’s try writing our own parser combinator.
+
+### (slide) 2:00
+
+Here is a parser combinator which we have named `twice`. It is a lot like
+the `many` combinator and in fact it has the same type signature.
+
+The difference between the `many` combinator and the `twice` combinator
+is that the `many` combinator will try to match its argument parser as many
+times as possible, but the `twice` combinator will match its argument parser
+exactly two times, no more, no less.
+
+The `twice` combinator takes one parser as an argument, which we have named
+`p`. The `p` parser can be any type of parser, which is what we mean by
+`forall a.` The type parameter for the `p` parser is named `a`.
+
+The `twice` combinator will first try to match the `p` parser, and bind
+the result to the name `p1`. Then it will try to match the `p` parser
+again, and bind the result to the name `p2`. If both of those succeed,
+then it will return an array with `p1` and `p2`.
+
+Down below we define and run a parser named `ayebeeTwice` with the same
+input as before. You can see that the `ayebeeTwice` parser matches the
+`ayebee` pattern two times, and returns true when the matched pattern has
+an uppercase ‘B’ character.
+
+
+So we can see that regular expressions and monadic parsers
+both solve essentially the same pattern matching problem.
 
 But the monadic parser is much longer than the regular expression and has
 a lot more code. Is that bad?
 
 The thing about regular expressions is that they seem like a reasonable
-and efficient solution for small toy examples like this one. But when
+and efficient solution for small toy examples like these. But when
 we take on larger and more complex problems, the advantage of monadic
 parsers becomes apparent.
 
@@ -374,7 +447,7 @@ the right.
 The square bracket syntax means that something is optional, so it's okay if that
 thing is missing.
 
-First it says that an address is either a mailbox or a group.
+First the specification says that an address is either a mailbox or a group.
 
 Then it says that a mailbox is either a name-addr or an addr-spec.
 
@@ -390,7 +463,7 @@ And it goes on like this.
 
 Can we write a monadic parser to parse an email address?
 
-### (slide) 0:15
+### (slide) 0:30
 
 Here is a monadic parser for parsing IETF email addresses, written by
 Fraser Tweedale and published in the Haskell library __purebred-email__.
@@ -416,11 +489,15 @@ Next, the spec says that a mailbox is either a name-addr or an addr-spec.
 
 In the monadic parser I see addressSpec on the right side of the
 alternative, and that expression on the left side must be equivalent to a
-name-addr, I guess.
+name-addr, I guess. There is an `optional displayName`.
+The `optional` function is a parser combinator
+which does exactly what you’d expect: it will try to match the `displayName`
+pattern one time but if the `displayName` pattern is not there then it
+skips it.
 
 Next, the spec says that an angleAddr is this addr-spec expression,
 surrounded by angle bracket characters and optional Comment Folding
-White Space expressions. Or, alternatly an obs-angle-addr.
+White Space expressions. Or, alternately an obs-angle-addr.
 
 The monadic parser says basically the same thing.
 I don’t see the obs-angle-addr alternative in the monadic parser for
@@ -445,7 +522,7 @@ Next let’s look at the same RFC 5322 spec implemented as a regular expression.
 The author of this regular expression claims that it quote
  “99.99% works” for parsing RFC 5322 email addresses.
 
-He may be right about that, but how can we tell?
+And he may be right about that, but how can we tell?
 
 The regular expression for RFC 5322 is shorter than the monadic parser, but it’s very
 difficult to read it or make improvements.
@@ -472,6 +549,49 @@ way than regular expressions. And even small patterns written as a monadic
 parser will be easier for others to read.
 
 
+### (slide) 2:00
+
+We often use regular expressions to scan a string and capture all of the
+patterns which we find.
+
+Here we want to find all of the integers in the string "10 x 2 y -3" and
+split them out.
+
+We’ve done this with both a regular expression and a monadic parser.
+
+There are a couple of things to notice here.
+
+First, the monadic parser for an integer doesn’t just match a string
+pattern and return a string, it actually converts the string to an
+integer and returns the integer. We’re using the `intDecimal` parser which
+is included in the purescript-parsing library. The `splitCap` function
+runs the `intDecimal` parser on this string and produces for us a fully typed
+data structure which tells us everything there is to know about the structure
+of the input string with respect to the integer patterns in the string.
+
+The second thing to notice is that we made a mistake when we were writing
+the integer pattern for the regular expression. We forgot to think about
+whether we wanted to allow negative integers. Now, it’s easy to change
+our regular expression so that it will allow negative integers, and I'm
+sure you all know how to do that.
+
+What’s hard is to take that improved integer regular expression pattern
+and publish it in a library so that other people can avoid making the same
+mistake. Of course, regular expression libraries do exist, and they contain
+useful patterns like the email regular expression which we saw before. But
+they really don't compose very well. The only way to compose regular
+expressions together is to concatenate the regular expression strings
+at runtime. This is because, again, regular expressions are a whole
+domain specific language which is embedded in some other host language.
+Regular expressions don't have any of the composition features like
+functions and modules that we expect from general-purpose programming
+languages.
+
+Monadic parsers, on the other hand, are just normal PureScript functions,
+and they compose very well. We’ve seen how to compose monadic parsers
+together by writing parser functions with parser combinators.
+Remember that the term ”parser combinator” just means a function
+which takes some parsers as arguments and then returns a new parser.
 
 
 
@@ -479,8 +599,17 @@ parser will be easier for others to read.
 
 
 
+Speed.
 
+You can expect a monadic parser to run about a hundred times slower than
+a regular expression.
 
+If you recognize Noam Chomsky and you know something about the Chomsky
+hierarchy, then you know that there are certain speed optimizations which
+are only theoretically possible to do with regular expressions. But that's not
+why regular expressions are so fast. They are fast because they have been around
+for a long time and humanity has collectively spent hundreds of millions
+of dollars paying programmers to write fast regular expression libraries.
 
 
 

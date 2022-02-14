@@ -176,6 +176,59 @@
                 </section>
 
                 <section>
+                  <h2>JavaScript regular expression</h2>
+                  <pre><code data-trim data-noescape class="language-javascript">
+                  const ayebee = /(a(b|B))*/;
+                  "aBabaB".match(ayebee);
+                  </code></pre>
+                  <pre><code data-trim data-noescape class="language-javascript">
+                  'aBabaB'
+                  </code></pre>
+                  <h2>PureScript monadic parser</h2>
+                  <pre><code data-trim data-noescape class="language-haskell">
+                  ayebee :: Parser String Boolean
+                  ayebee = do
+                    _ <- char 'a'
+                    x <- char 'b' <|> char 'B'
+                    pure (x == 'B')
+
+                  ayebeeMany :: Parser String (Array Boolean)
+                  ayebeeMany = many ayebee
+
+                  runParser "aBabaB" ayebeeMany
+                  </code></pre>
+                  <pre><code data-trim data-noescape class="language-haskell">
+                  Right [true, false, true]
+                  </code></pre>
+                </section>
+
+                <section>
+                  <h2>Parser combinator</h2>
+                  <pre><code data-trim data-noescape class="language-haskell">
+                  twice :: forall a. Parser String a -> Parser String (Array a)
+                  twice p = do
+                    p1 <- p
+                    p2 <- p
+                    pure [p1, p2]
+                  </code></pre>
+                  <pre><code data-trim data-noescape class="language-haskell">
+                  ayebee :: Parser String Boolean
+                  ayebee = do
+                    _ <- char 'a'
+                    x <- char 'b' <|> char 'B'
+                    pure (x == 'B')
+
+                  ayebeeTwice :: Parser String (Array Boolean)
+                  ayebeeTwice = twice ayebee
+
+                  runParser "aBabaB" ayebeeTwice
+                  </code></pre>
+                  <pre><code data-trim data-noescape class="language-haskell">
+                  Right [true, false]
+                  </code></pre>
+                </section>
+
+                <section>
                   <h2>RFC 5322 email address</h2>
 
                   https://datatracker.ietf.org/doc/html/rfc5322#page-16
@@ -288,6 +341,26 @@
 \\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
                   </code></pre>
                 </section>
+
+                <section>
+                  <h2>JavaScript regular expression</h2>
+                  <pre><code data-trim data-noescape class="language-javascript">
+                  [... '10 x 2 y -3'.split(/(\d+)/)];
+                  </code></pre>
+                  <pre><code data-trim data-noescape class="language-javascript">
+                  ['10', ' x ', '2', ' y -', '3']
+                  </code></pre>
+                  <h2>PureScript monadic parser</h2>
+                  <pre><code data-trim data-noescape class="language-haskell">
+                  intDecimal :: Parser String Int
+
+                  splitCap intDecimal "10 x 2 y -3"
+                  </code></pre>
+                  <pre><code data-trim data-noescape class="language-haskell">
+                  [(Right 10),(Left " x "),(Right 2),(Left " y "),(Right -3)]
+                  </code></pre>
+                </section>
+
 			</div>
 		</div>
 
