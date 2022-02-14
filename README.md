@@ -644,7 +644,7 @@ Thank you very much for listening to my talk.
 
 [__purescript-parsing-replace__](https://pursuit.purescript.org/packages/purescript-parsing-replace)
 
-[Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
+[*Parse, don't validate*](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
 
 [*Monadic Parser Combinators*](https://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf)
 
@@ -654,7 +654,7 @@ Thank you very much for listening to my talk.
 
 [*Parsec: Direct Style Monadic Parser Combinators For The Real World*](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf) by Daan Leijen and Erik Meijer.
 
-[Write-Only Programming Languages](https://en.wikipedia.org/wiki/Write-only_language).
+[*Write-Only Language*](https://en.wikipedia.org/wiki/Write-only_language).
 
 
 
