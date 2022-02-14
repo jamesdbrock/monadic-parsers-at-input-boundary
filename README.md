@@ -560,8 +560,9 @@ preserves the proof that the input string was legal.
 
 Here is a type for a monadic parser.
 
-This is an excerpt from the 1998 paper FUNCTIONAL PEARLS
-*Monadic Parsing in Haskell* by Graham Hutton and Erik Meijer.
+This is an excerpt from the 1998 paper
+[FUNCTIONAL PEARLS *Monadic Parsing in Haskell*](https://www.cs.nott.ac.uk/~pszgmh/pearl.pdf)
+by Graham Hutton and Erik Meijer.
 
 On the bottom line is says that
 the type of a parser for a data type `a` is a function from a string to a list
@@ -602,40 +603,65 @@ that the theory and techniques have been pretty well-established since the 1990s
 
 
 
-
+### (slide)
 Speed.
 
-You can expect a PureScript monadic parser to run about fifty times slower
+In a JavaScript runtime environment, you can expect a PureScript monadic
+parser to run at least 10 times slower
 than a JavaScript regular expression.
 
-If you recognize Noam Chomsky and you know something about the Chomsky
-hierarchy, then you know that there are certain speed optimizations which
-are only theoretically possible to do with regular expressions. But that's not
-why regular expressions are so fast. They are fast because they have been around
-for a long time and humanity has collectively spent hundreds of millions
-of dollars paying programmers to write fast regular expression libraries.
+That's just how it is, and that situation probably will not improve much
+in the future.
+
+If your input byte stream will be large and you need to process it quickly
+then you might not be able to use PureScript monadic parsers.
+
+### (slide)
+
+All of the techniques we talked about here are also used in Haskell.
+There are Haskell monadic parsing libraries such as Attoparsec which run
+very fast, about as fast as regular expressions, sometimes faster.
+
+So if you learn these monadic parsing techniques then you can apply them
+in native execution environments very well.
 
 
+### (slide)
 
+Whenever your process receives an input byte stream, the first thing you
+should do is to parse that byte stream and turn it into a data structure.
 
-The parser syntax looks worse, why is it better?
+Monadic parsers are the easiest and most effective way to do that.
 
-We can decide what to parse next depending on the value of what the B was.
+Unless you already have a parsing library for the specific format of the
+byte stream or you are under severe performance constraints, the first
+technique you should consider for parsing an input byte stream is
+monadic parsers.
 
-Make illegal states unrepresentable. A quick review of Parse, don't validate.
-
-Quick explanation of do-notation.
-
-Mention monad transformers, tie it into Jordan's talk
-
-type-safety means the compiler can verify that we have accounted for all possible
-surprises in the input byte stream
+Thank you very much for listening to my talk.
 
 
 
 # References
 
+[__purescript-parsing__](https://pursuit.purescript.org/packages/purescript-parsing)
+
+[__purescript-parsing-replace__](https://pursuit.purescript.org/packages/purescript-parsing-replace)
+
+[Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
+
 [*Monadic Parser Combinators*](https://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf)
+
+[FUNCTIONAL PEARLS *Monadic Parsing in Haskell*](https://www.cs.nott.ac.uk/~pszgmh/pearl.pdf)
+
+[*Revisiting Monadic Parsing in Haskell*](https://vaibhavsagar.com/blog/2018/02/04/revisiting-monadic-parsing-haskell/)
+
+[*Parsec: Direct Style Monadic Parser Combinators For The Real World*](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf) by Daan Leijen and Erik Meijer.
+
+[Write-Only Programming Languages](https://en.wikipedia.org/wiki/Write-only_language).
+
+
+
 
 ---
 
