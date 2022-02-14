@@ -105,7 +105,7 @@ stream.
 4. __Monadic parser combinators__.
 
 I will try to convince you that monadic parsing is the best method
-for parsing any arbitrary input bytes stream,
+for parsing any arbitrary input byte stream,
 and this is always the first method you
 should try when you are reading a byte stream from over the process input
 boundary.
@@ -624,7 +624,8 @@ in other execution environments very well.
 
 ### (slide)
 
-Whenever your process receives an input byte stream, the first thing you
+Whenever your process receives a byte stream from the world
+beyond the process input boundary, the first thing you
 should do is to parse that byte stream into a data structure.
 
 Monadic parsers are the easiest and most effective way to do that.
