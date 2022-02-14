@@ -29,7 +29,7 @@
 
                 PureConf 2022 February 18
 
-                purescript-parsing
+                __purescript-parsing__
                 </section>
                 <section>
                   Input ⟶
@@ -104,7 +104,7 @@
                 </section>
 
                 <section>
-                  <h2>Regular expression</h2>
+                  <h2>JavaScript regular expression</h2>
                   <pre><code data-trim data-noescape class="language-javascript">
                   const ayebee = /a(b|B)/;
                   "aB".match(ayebee);
@@ -128,7 +128,7 @@
                 </section>
 
                 <section>
-                  <h2>Regular expression</h2>
+                  <h2>JavaScript regular expression</h2>
                   <pre><code data-trim data-noescape class="language-javascript">
                   const ayebee = /a(b|B)/;
                   "aB".match(ayebee);
@@ -152,7 +152,7 @@
                 </section>
 
                 <section>
-                  <h2>Regular expression</h2>
+                  <h2>JavaScript regular expression</h2>
                   <pre><code data-trim data-noescape class="language-javascript">
                   const ayebee = /a(b|B)/;
                   "aB".match(ayebee);
@@ -193,8 +193,7 @@
 
   name-addr       =   [display-name] angle-addr
 
-  angle-addr      =   [CFWS] "<" addr-spec ">" [CFWS] /
-                      obs-angle-addr
+  angle-addr      =   [CFWS] "<" addr-spec ">" [CFWS] / obs-angle-addr
 
   group           =   display-name ":" [group-list] ";" [CFWS]
 
@@ -256,8 +255,7 @@
                   </code></pre>
 
                   <pre style="font-size:40%;">
-  angle-addr      =   [CFWS] "<" addr-spec ">" [CFWS] /
-                    obs-angle-addr</pre>
+  angle-addr      =   [CFWS] "<" addr-spec ">" [CFWS] / obs-angle-addr</pre>
                   <pre style="font-size:35%;margin-top:-15px;"><code data-trim data-noescape class="language-haskell">
                     angleAddr = optionalCFWS *> char '<' *> addressSpec <* char '>' <* optionalCFWS
                   </code></pre>

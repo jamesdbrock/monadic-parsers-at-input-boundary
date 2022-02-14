@@ -32,19 +32,20 @@ regular expressions. This talk is inspired and informed by the essay
 by Alexis King.
 
 
-## The Input Boundary
+## Talk
+### (slide) 0:30
 
 My name is James Brock and I work at the AI consultancy
 company Cross Compass in Tokyo.
 
 This is my talk Monadic Parsers at the Input Boundary for PureConf 2022.
 
-This talk is for an audience who has some familiarity with regular expressions and monads.
-
 I am a maintainer for the PureScript `parsing` library, and the examples
 in this talk will use syntax and type names from that library.
 
-### (slide)
+This talk is for an audience who has some familiarity with regular expressions and monads.
+
+### (slide) 0:30
 
 A process running on a computer is isolated from other processes on that
 computer, and from the rest of the world. On that isolation boundary,
@@ -58,7 +59,7 @@ or anything else represented in process memory as an array of bytes.
 
 We want to talk about byte streams.
 
-### (slide)
+### (slide) 1:00
 
 For output, a process serializes byte streams.
 Serializing a byte stream is easy. We write a byte stream and we send it.
@@ -84,7 +85,7 @@ It is the act of reading and parsing input byte streams that we will focus on
 in this talk. We will be talking mostly about Unicode strings, but
 everything in this talk will generalize to any kind of byte stream.
 
-### (slide)
+### (slide) 1:00
 
 In the year 2022, here are some common methods of parsing an input byte
 stream.
@@ -109,7 +110,7 @@ and this is always the first method you
 should try when you are reading a byte stream from over the process input
 boundary.
 
-### (slide)
+### (slide) 1:15
 
 I'll read to you from the essay
 [Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)
@@ -126,7 +127,7 @@ She does not talk about monadic parsers or any kind of monads at all.
 Her emphasis is on taking an unstructured input, like a byte stream, and turning
 it into a data structure.
 
-### (slide)
+### (slide) 0:30
 
 The data structure should ideally *make illegal states unrepresentable*.
 This is a common proverb in the functional programming world.
@@ -141,7 +142,7 @@ we have provided a proof that our input byte stream in in some sense ”legal.�
 
 The easiest way to do this is with monadic parsers.
 
-### (slide)
+### (slide) 2:30
 
 I’ll read to you from the introduction to the paper
 [*Parsec: Direct Style Monadic Parser Combinators For The Real World*](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf) by Daan Leijen and Erik Meijer.
@@ -200,7 +201,7 @@ of using a domain-specific parsing language like regular expressions.
 And after we have matched a pattern we produce a data structure which
 preserves the proof that the input string was legal.
 
-### (slide)
+### (slide) 0:30
 
 A parsing monad is a monad with three features: It knows its position in the
 input string. It can choose alternate parsing branches based on the contents
@@ -210,7 +211,7 @@ is illegal and cannot be parsed.
 There are many implementations of monadic parser combinators in many languages,
 and all of them have these three features.
 
-### (slide)
+### (slide) 0:45
 
 Here is the type for a monadic parser.
 
@@ -231,7 +232,7 @@ The essay
 [*Revisiting Monadic Parsing in Haskell*](https://vaibhavsagar.com/blog/2018/02/04/revisiting-monadic-parsing-haskell/)
 by Vaibhav Sagar has some good discussion about that.
 
-### (slide)
+### (slide) 0:30
 
 If that last definition was too prosaic for you then, here is the same
 definition expressed as a poem, by Fritz Ruehr.
@@ -247,11 +248,11 @@ Dr. Seuss on Parser Monads:
 > of Things and Strings!
 
 Ok that's enough theory. We’ll stop at the Doctor Seuss level of parsing
-theory. We don’t actually need to know any of this theory
+theory. We don’t actually need to know any theory
 to use monadic parsers, but now you know that the theory exists and
 that the theory been pretty well-established since the 1990s.
 
-### (slide)
+### (slide) 2:00
 
 Let's look at an example of matching a pattern with a monadic parser.
 
@@ -308,7 +309,7 @@ simple data structure. What is the simplest data structure? It’s a single
 bit. And a single bit contains all of the information we need about whether
 the ‘b’ character was uppercase or lowercase.
 
-### (slide) (slide back) (slide)
+### (slide) (slide back) (slide) 0:30
 
 So now we’ve changed the type of the parser to return a `Boolean` instead
 of a `Char`. The parser returns `true` if the parse succeeded and the
@@ -319,11 +320,7 @@ which make illegal states unrepresentable. There are only two possible
 ways to successfully parse this string, and the data structure which we’re
 returning has exactly two possible values, and no more.
 
-
-
-
-
-### (slide) (slide back) (slide)
+### (slide) (slide back) (slide) 0:30
 
 So recall that I said that a monadic parser needs three features:
 * the state of the current position in the input string
@@ -336,19 +333,45 @@ illegal string `"aXXX"` and instead of returning `Right` and a
 for the error. The error says that it failed to parse because it was
 expecting a ‘B’ character at position 2.
 
+So we can see that this regular expression and this monadic parser
+both solve the same pattern matching problem.
 
-### (slide)
+But the monadic parser is much longer than the regular expression and has
+a lot more code. Is that bad?
+
+The thing about regular expressions is that they seem like a reasonable
+and efficient solution for small toy examples like this one. But when
+we take on larger and more complex problems, the advantage of monadic
+parsers becomes apparent.
+
+That’s analogous to the situation with pure functional programming.
+It’s difficult to convey the advantage of pure functional programming
+with small toy examples, because small toy programs are simple in any
+language.
+
+The advantages of pure functional programming become truly apparent
+when we are maintaining and refactoring and improving large complicated
+computer programs.
+
+In the same way, the advantage of monadic parsing over regular expressions
+becomes apparent when we are parsing more complicated patterns.
+
+
+### (slide) 1:00
+
 
 Let’s parse something a little bit harder. How about an email address?
+We all have a pretty good idea what the format for an email address is.
 Here is the complete Internet
 Engineering Task Force specification for the format of an email address.
 Okay, that’s a little bit hard. It’s not quite as simple as we might have
 expected, but it’s not too bad.
 
-Let’t think about what it says. The forward slashes mean “alternative” which
-means either/or.
+Let’t think about what it says. The forward slashes in the syntax
+mean “alternative” which means either the one on the left, or the one on
+the right.
 
-The square brackets mean that something is optional, so it's okay if that
+The square bracket syntax means that something is optional, so it's okay if that
 thing is missing.
 
 First it says that an address is either a mailbox or a group.
@@ -367,14 +390,20 @@ And it goes on like this.
 
 Can we write a monadic parser to parse an email address?
 
-### (slide)
+### (slide) 0:15
 
 Here is a monadic parser for parsing IETF email addresses, written by
 Fraser Tweedale and published in the Haskell library __purebred-email__.
 
-That looks a lot like the IETF specification. Let's compare them line by line.
+This is in the Haskell language and uses the Attoparsec parsing library.
+The syntax for PureScript using the purescript-parsing library would be
+almost exactly the same.
 
-### (slide)
+This monadic parser looks a lot like the Internet Engineering Task Force
+specification.
+Let's compare the specification and the monadic parser line by line.
+
+### (slide) 1:30
 
 First the spec says that an address is either a mailbox or a group.
 
@@ -386,12 +415,12 @@ Fraser Tweedale had good reasons for doing that.
 Next, the spec says that a mailbox is either a name-addr or an addr-spec.
 
 In the monadic parser I see addressSpec on the right side of the
-alternative, and that expression on the left side must equivalent to a
+alternative, and that expression on the left side must be equivalent to a
 name-addr, I guess.
 
 Next, the spec says that an angleAddr is this addr-spec expression,
 surrounded by angle bracket characters and optional Comment Folding
-White Space expressions. Or, alternatively an obs-angle-addr.
+White Space expressions. Or, alternatly an obs-angle-addr.
 
 The monadic parser says basically the same thing.
 I don’t see the obs-angle-addr alternative in the monadic parser for
@@ -411,7 +440,7 @@ implementation.
 Next let’s look at the same RFC 5322 spec implemented as a regular expression.
 
 
-### (slide)
+### (slide) 1:00
 
 The author of this regular expression claims that it quote
  “99.99% works” for parsing RFC 5322 email addresses.
@@ -420,6 +449,27 @@ He may be right about that, but how can we tell?
 
 The regular expression for RFC 5322 is shorter than the monadic parser, but it’s very
 difficult to read it or make improvements.
+
+This is why Regular Expressions are included in the pejorative Wikipedia
+article about
+[Write-Only Programming Languages](https://en.wikipedia.org/wiki/Write-only_language).
+
+Here is a quote from the article:
+
+> write-only code is source code so arcane, complex, or ill-structured that it
+> cannot be reliably modified or even comprehended by anyone with the possible
+> exception of the author.
+
+Now, email addresses didn't start out as an Internet Engineering Task Force
+specification. They were intended to be simple, and they started out simple.
+In the 1970s an email address was a username and then an “at” sign and then
+the name of a computer. We could parse that with a regular expression.
+
+But over time email addresses became more complicated, as everything does.
+
+Monadic parsers will scale and grow in a much more maintainable
+way than regular expressions. And even small patterns written as a monadic
+parser will be easier for others to read.
 
 
 
@@ -453,6 +503,7 @@ surprises in the input byte stream
 # References
 
 [*Monadic Parser Combinators*](https://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf)
+
 ---
 
 <p align="center">
