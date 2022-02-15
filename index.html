@@ -335,6 +335,21 @@
                   </code></pre>
                 </section>
 
+                <section>
+                  <p>Find groups of balanced parentheses</p>
+                  <pre><code data-trim data-noescape class="language-haskell">
+                    balanceParens :: Parser String Unit
+                    balanceParens = do
+                      void $ char '('
+                      void $ manyTill (balanceParens <|> void anyChar) (char ')')
+
+                    rmap fst <$> splitCap (match balanceParens) "((🌼)) (()())"
+                  </code></pre>
+                  <pre><code data-trim data-noescape class="language-haskell">
+                  [Right "((🌼))", Left " ", Right "(()())"]
+                  </code></pre>
+                </section>
+
                 <section data-markdown>
                 “In contrast to parser generators that offer a fixed
                 set of combinators to express grammars, these combinators are manipulated

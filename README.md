@@ -496,6 +496,27 @@ Remember that the term ”parser combinator” just means a function
 which takes some parsers as arguments and then returns a new parser.
 
 
+### (slide)
+
+There are many other tricks that we can do when we’re using monadic parsers
+for pattern matching. There’s one more trick that I want to mention in
+particular, and that is matching recursive patterns.
+
+Regular expressions famously cannot parse an input string which has a
+recursive or tree-like structure. That means that regular expressions
+cannot parse HTML. They cannot parse JSON. They cannot match balanced
+parentheses. All of these things have a recursive tree-like structure.
+
+Here’s a monadic parser named `balanceParens` which matches a balanced
+group of parentheses.
+It will pair each open parenthesis with a close parenthesis and capture
+the group when the last parenthesis closes.
+
+The way that we write a monadic parser to parse a recursive structure like
+this is that we write a recursive monadic parser. You can see that the
+monadic parser calls itself on the second line, and that is how
+it tracks its depth in the parenthesis parse tree.
+
 ### (slide) 2:30
 
 I’ll read to you from the introduction to the paper
