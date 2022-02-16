@@ -678,8 +678,48 @@ Thank you very much for listening to my talk.
 
 [*Write-Only Language*](https://en.wikipedia.org/wiki/Write-only_language).
 
+# Further topics
 
+The https://github.com/jamesdbrock/purescript-parsing-replace package
+fills in all the features gaps between a parsing library and a regular 
+expression library like
 
+JavaScript RegExp
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+
+or the Python re module
+
+https://docs.python.org/3/library/re.html
+
+I’ve actually written this library three times, once for Haskell megaparsec,
+once for Haskell Attoparsec, and once for purescript-parsing.
+
+I designed this library by going through the Python re module and making sure
+that all the situations solved by the Python re module also have a good
+solution with monadic parsers.
+
+There is one feature of Python re which is not obvious: `re.subn`
+
+https://docs.python.org/3/library/re.html#re.subn
+
+https://pursuit.purescript.org/packages/purescript-parsing-replace/1.0.2/#user-content-count-the-pattern-matches-with-splitcapt
+
+The way that we accomplish this is by using the `ParserT` monad transformer.
+
+It’s time to talk about the Chomsky Heirarchy.
+
+https://en.wikipedia.org/wiki/Noam_Chomsky#/media/File:Noam_Chomsky_(1977).jpg
+
+https://en.wikipedia.org/wiki/Chomsky_hierarchy#The_hierarchy
+
+https://upload.wikimedia.org/wikipedia/commons/9/9a/Chomsky-hierarchy.svg
+
+Regular expressions can parse regular grammers.
+
+Monadic parsers can parse context-free grammars.
+
+Monadic parser transformers can parse context-sensitive grammars.
 
 ---
 
