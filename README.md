@@ -721,6 +721,9 @@ Monadic parsers can parse context-free grammars.
 
 Monadic parser transformers can parse context-sensitive grammars.
 
+Also talk about when to backtrack on failure.
+
+
 ---
 
 <p align="center">
