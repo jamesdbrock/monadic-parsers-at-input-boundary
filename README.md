@@ -3,10 +3,14 @@
 # Monadic Parsers at the Input Boundary
 
 This is a presentation for
-[PureConf 2022 18 February](https://hasgeek.com/FP-Juspay/pureconf/)
+[PureConf 2022 February 18](https://hasgeek.com/FP-Juspay/pureconf/)
 about monadic parsers in general, and the
 [__purescript-parsing__](https://github.com/purescript-contrib/purescript-parsing)
 package in particular.
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=LLkbzt4ms6M" target="_blank">
+ <img src="http://img.youtube.com/vi/LLkbzt4ms6M/hqdefault.jpg" alt="Watch the video" width="800" height="600" border="10" />
+</a>
 
 ## Abstract
 
